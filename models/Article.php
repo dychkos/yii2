@@ -37,10 +37,11 @@ class Article extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['description', 'content'], 'string'],
-            [['date'], 'safe'],
-            [['viewed', 'user_id', 'status', 'category_id'], 'integer'],
-            [['title', 'image'], 'string', 'max' => 255],
+            [['title'], 'required'],
+            [['title','description','content'], 'string'],
+            [['date'], 'date', 'format'=>'php:Y-m-d'],
+            [['date'], 'default', 'value' => date('Y-m-d')],
+            [['title'], 'string', 'max' => 255]
         ];
     }
 
@@ -62,6 +63,20 @@ class Article extends \yii\db\ActiveRecord
             'category_id' => 'Category ID',
         ];
     }
+
+    public function saveImage($filename){
+        $this->image=$filename;
+        return $this->save(false);
+    }
+
+    public function getImage() {
+        if($this->image) {
+            return 'uploads/'.$this->image;
+        }
+
+        return '/noimage.png';
+    }
+
 
     /**
      * Gets query for [[ArticleTags]].
