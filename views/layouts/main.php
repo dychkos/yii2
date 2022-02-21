@@ -65,9 +65,6 @@ PublicAsset::register($this);
 
 <?= $content ?>
 
-<!--footer start-->
-
-
 <footer class="footer-widget-section">
     <div class="container">
         <div class="row">

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Article;
+use app\models\Category;
 use app\models\EntryForm;
 use Yii;
 use yii\data\Pagination;
@@ -64,19 +65,20 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $query = Article::find();
+        $data = Article::getAll(1);
 
-        $count = $query->count();
+        $popular = Article::getPopular();
 
-        $pagination = new Pagination(['totalCount' => $count, 'pageSize' => 1]);
+        $recent = Article::getRecent();
 
-        $articles = $query->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
+        $categories = Category::find()->all();
 
         return $this->render('index',[
-            'articles' => $articles,
-            'pagination' => $pagination
+            'articles' => $data['articles'],
+            'pagination' => $data['pagination'],
+            'popular' => $popular,
+            'recent' => $recent,
+            'categories' => $categories,
         ]);
     }
 
@@ -85,10 +87,24 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
-    public function actionView($message = null)
+    public function actionView($id)
     {
-        return $this->render("single");
+        $article = Article::findOne($id);
+
+        $popular = Article::getPopular();
+
+        $recent = Article::getRecent();
+
+        $categories = Category::find()->all();
+
+        return $this->render("single",
+            ['article' => $article,
+            'popular' => $popular,
+            'recent' => $recent,
+            'categories' => $categories]
+        );
     }
+
 
     /**
      * Category action.
