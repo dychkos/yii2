@@ -98,10 +98,12 @@ class SiteController extends Controller
         $categories = Category::find()->all();
 
         return $this->render("single",
-            ['article' => $article,
-            'popular' => $popular,
-            'recent' => $recent,
-            'categories' => $categories]
+            [
+                'article' => $article,
+                'popular' => $popular,
+                'recent' => $recent,
+                'categories' => $categories
+            ]
         );
     }
 
@@ -129,16 +131,7 @@ class SiteController extends Controller
     }
 
 
-    /**
-     * Say action.
-     *
-     * @return Response|string
-     */
-    public function actionSay($message = null)
-    {
-        if(!$message) $message = "Hello Yii2";
-        return $this->render("say",compact("message"));
-    }
+
 
     /**
      * Entry action.
@@ -156,40 +149,6 @@ class SiteController extends Controller
         }
     }
 
-
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
-    public function actionLogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->user->logout();
-
-        return $this->goHome();
-    }
 
     /**
      * Displays contact page.
