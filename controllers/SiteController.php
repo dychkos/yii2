@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\Article;
 use app\models\Category;
+use app\models\Comment;
+use app\models\CommentForm;
 use app\models\EntryForm;
 use Yii;
 use yii\data\Pagination;
@@ -97,14 +99,34 @@ class SiteController extends Controller
 
         $categories = Category::find()->all();
 
+        $comment = $article->getArticleComments();
+        $commentForm = new CommentForm();
+
         return $this->render("single",
             [
                 'article' => $article,
                 'popular' => $popular,
                 'recent' => $recent,
-                'categories' => $categories
+                'categories' => $categories,
+                'comment' => $comment,
+                'commentForm' => $commentForm
             ]
         );
+    }
+
+    public function actionComment($id)
+    {
+        $model = new CommentForm();
+
+        if(Yii::$app->request->isPost)
+        {
+            $model->load(Yii::$app->request->post());
+            if($model->saveComment($id))
+            {
+                Yii::$app->getSession()->setFlash('comment', "Your comment is successful added!");
+                return $this->redirect(['site/view', 'id' => $id]);
+            }
+        }
     }
 
 

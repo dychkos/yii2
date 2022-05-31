@@ -2,10 +2,13 @@
 
 namespace app\models;
 
-class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
+use phpDocumentor\Reflection\Types\This;
+
+class User extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
     public $id;
     public $username;
+    public $email;
     public $password;
     public $authKey;
     public $accessToken;
@@ -14,12 +17,15 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
         '100' => [
             'id' => '100',
             'username' => 'admin',
+            'email' => 'admin@gmail.com',
             'password' => 'admin',
+            'isAdmin' => '1',
             'authKey' => 'test100key',
             'accessToken' => '100-token',
         ],
         '101' => [
             'id' => '101',
+            'email' => 'admin@gmail.com',
             'username' => 'demo',
             'password' => 'demo',
             'authKey' => 'test101key',
@@ -105,6 +111,16 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     public function validatePassword($password)
     {
         return $this->password === $password;
+    }
+
+    public function getImage()
+    {
+        if ($this->photo)
+        {
+            return $this->photo;
+        }
+
+        return './no-photo.img';
     }
 
 }

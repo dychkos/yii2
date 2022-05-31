@@ -35,7 +35,7 @@ $this->title = 'My Yii Application';
                                     </div>
                                 </div>
                                 <div class="social-share">
-                                    <span class="social-share-title pull-left text-capitalize">By <a href="#">Rubel</a> On <?= $article->getDate(); ?></span>
+                                    <span class="social-share-title pull-left text-capitalize">By <?= isset($article->author->name) ? $article->author->name : "admin" ?> On <?= $article->getDate(); ?></span>
                                     <ul class="text-center pull-right">
                                         <li><a class="s-facebook" href="#"><i class="fa fa-eye"></i></a></li>
                                         <?= (int) $article->viewed; ?>

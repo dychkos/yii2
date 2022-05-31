@@ -122,6 +122,12 @@ class Article extends \yii\db\ActiveRecord
         return $this->hasMany(Comment::className(), ['article_id' => 'id']);
     }
 
+    public function getArticleComments()
+    {
+        return $this->getComments()->where(['status' => 1])->all();
+    }
+
+
     public function getCategory(){
         return $this->hasOne(Category::className(),['id' => 'category_id']);
     }
@@ -155,6 +161,11 @@ class Article extends \yii\db\ActiveRecord
         return false;
     }
 
+    public function saveArticle() {
+        $this->user_id = Yii::$app->user->id;
+        return $this->save(false);
+    }
+
 
     public function saveTags($tags) {
         if(is_array($tags)) {
@@ -170,4 +181,17 @@ class Article extends \yii\db\ActiveRecord
     private function clearCurrentTags() {
         ArticleTag::deleteAll(['article_id' => $this->id]);
     }
+
+    public function getAuthor()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    public function viewedCounter()
+    {
+        $this->viewed += 1;
+        return $this->save(false);
+    }
+
+
 }
